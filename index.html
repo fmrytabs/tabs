@@ -305,6 +305,20 @@ body[unresolved] {opacity: 0; display: block; overflow: hidden; position: relati
         #artistView { z-index: 50; }
         #songView { z-index: 100; }
 
+        /* Header auto-hide in song view */
+        #songView .modal-header {
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            z-index: 5;
+            transition: transform 0.28s ease;
+        }
+        #songView .modal-header.header-hidden {
+            transform: translateY(-100%);
+        }
+        #songView .modal-content {
+            padding-top: 69px;
+        }
+
         .modal-header {
             display: flex;
             align-items: center;
@@ -8356,16 +8370,34 @@ To you`
             document.body.style.overflow = '';
         }
 
+        function adjustSongFontSize(content) {
+            const pre = document.getElementById('songViewContent');
+            const lines = content.split('\n').filter(l => {
+                const t = l.trim();
+                return t.length > 0 && !/^[eEBGDAd]\|/.test(t);
+            });
+            if (!lines.length) return;
+            const maxLen = Math.max(...lines.map(l => l.length));
+            if (maxLen < 35) { pre.style.fontSize = ''; return; }
+            const availWidth = (songView.querySelector('.modal-content').clientWidth || window.innerWidth) - 32;
+            const target = availWidth / (maxLen * 0.601);
+            pre.style.fontSize = Math.max(9, Math.min(15, Math.floor(target))) + 'px';
+        }
+
         function openSongView(song) {
             stopAutoscroll();
             document.getElementById('songViewTitle').textContent = song.title;
             document.getElementById('songViewArtist').textContent = song.artist;
             document.getElementById('songViewContent').innerHTML = processContentForChords(song.content);
-            document.querySelector('#songView .modal-content').scrollTop = 0;
+            const mc = document.querySelector('#songView .modal-content');
+            mc.scrollTop = 0;
+            lastSongScroll = 0;
+            songModalHeader.classList.remove('header-hidden');
             songView.classList.add('open');
             document.body.style.overflow = 'hidden';
             history.pushState({ modal: 'song' }, '');
             requestWakeLock();
+            requestAnimationFrame(() => adjustSongFontSize(song.content));
         }
 
         function closeSongView() {
@@ -8419,6 +8451,23 @@ To you`
                 btn.style.background = 'var(--accent-color)';
             }
         }
+
+        // =========================================================================
+        // HEADER AUTO-HIDE ON SCROLL
+        // =========================================================================
+        const songModalHeader = document.querySelector('#songView .modal-header');
+        let lastSongScroll = 0;
+
+        document.querySelector('#songView .modal-content').addEventListener('scroll', function() {
+            const y = this.scrollTop;
+            const delta = y - lastSongScroll;
+            if (delta > 4 && y > 80) {
+                songModalHeader.classList.add('header-hidden');
+            } else if (delta < -4) {
+                songModalHeader.classList.remove('header-hidden');
+            }
+            lastSongScroll = y;
+        }, { passive: true });
 
         // =========================================================================
         // WAKE LOCK — écran toujours allumé
