@@ -121,6 +121,75 @@ body[unresolved] {opacity: 0; display: block; overflow: hidden; position: relati
             box-shadow: 0 0 0 2px var(--secondary-color);
         }
 
+        .search-wrapper {
+            position: relative;
+            margin-bottom: 16px;
+        }
+        .search-wrapper .search-bar {
+            margin-bottom: 0;
+            padding-right: 44px;
+        }
+        .search-clear {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 20px;
+            cursor: pointer;
+            padding: 4px 8px;
+            line-height: 1;
+            display: none;
+        }
+
+        .chord-clickable {
+            cursor: pointer;
+            color: var(--accent-color);
+            font-weight: bold;
+            border-radius: 3px;
+            padding: 0 1px;
+        }
+
+        .chord-popup {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.45);
+            z-index: 400;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .chord-popup-box {
+            background: var(--bg-color);
+            border-radius: 20px;
+            padding: 24px 28px 20px;
+            text-align: center;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.25);
+            min-width: 220px;
+        }
+        .chord-popup-name {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        .chord-popup-svg {
+            margin: 8px auto;
+        }
+        .chord-popup-close {
+            margin-top: 12px;
+            padding: 10px 36px;
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 24px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+        }
+
         /* --- FILTRES CATÉGORIES --- */
         .filters {
             display: flex;
@@ -379,7 +448,10 @@ body[unresolved] {opacity: 0; display: block; overflow: hidden; position: relati
             <button class="segment-btn" data-mode="artists">Artistes</button>
         </div>
 
-        <input type="text" id="searchInput" class="search-bar" placeholder="Rechercher..." data-dashlane-rid="7db62d4ec04c6637">
+        <div class="search-wrapper">
+            <input type="text" id="searchInput" class="search-bar" placeholder="Rechercher..." data-dashlane-rid="7db62d4ec04c6637">
+            <button class="search-clear" id="searchClear" aria-label="Effacer">✕</button>
+        </div>
         
         <div class="filters" id="filterContainer">
             <button class="filter-btn active" data-category="Tout" data-dashlane-label="true" data-dashlane-rid="74f6418b35491647">Tout</button>
@@ -870,7 +942,7 @@ body[unresolved] {opacity: 0; display: block; overflow: hidden; position: relati
 
     <div class="modal-view" id="artistView">
         <div class="modal-header">
-            <button class="back-btn" onclick="closeArtistView()">Retour</button>
+            <button class="back-btn" onclick="history.back()">Retour</button>
             <div class="modal-title-container">
                 <div class="modal-title" id="artistViewTitle">Nom de l'artiste</div>
                 <div class="modal-subtitle">Chansons</div>
@@ -883,7 +955,7 @@ body[unresolved] {opacity: 0; display: block; overflow: hidden; position: relati
 
     <div class="modal-view" id="songView">
         <div class="modal-header">
-            <button class="back-btn" onclick="closeSongView()" data-dashlane-label="true" data-dashlane-rid="be44b8f8d3aefb5f">Retour</button>
+            <button class="back-btn" onclick="history.back()" data-dashlane-label="true" data-dashlane-rid="be44b8f8d3aefb5f">Retour</button>
             <div class="modal-title-container">
                 <div class="modal-title" id="songViewTitle">Fade Into You</div>
                 <div class="modal-subtitle" id="songViewArtist">Mazzy Star</div>
@@ -979,6 +1051,14 @@ A         E               Bm
 I think it's strange you never knew
 A         E               Bm
 I think it's strange you never knew</pre>
+        </div>
+    </div>
+
+    <div class="chord-popup" id="chordPopup" style="display:none" onclick="closeChordPopup()">
+        <div class="chord-popup-box" onclick="event.stopPropagation()">
+            <div class="chord-popup-name" id="chordPopupName"></div>
+            <div class="chord-popup-svg" id="chordPopupSvg"></div>
+            <button class="chord-popup-close" onclick="closeChordPopup()">Fermer</button>
         </div>
     </div>
 
@@ -7839,28 +7919,286 @@ I will always love you`
                 title: "Lay It Down Slow",
                 artist: "Spiritualized",
                 category: "Ptio",
-                content: `[Intro]
-E   A   E   A
+                content: `[Chords]
+A/C# = x422xx
+
+[Intro]
+B  A  E
+B  A  E  A/C#  E
 
 [Verse 1]
-E                  A
-Lay it down slow, lay it down free
-E                             A
-Lay it down easy, but lay it on me
-C#m                B
-If you've got love, lay it down
-A                  E
-If you've got love, lay it down
+           E
+If you got dreams in your heart
+              F#m
+Why don't you share them with me?
+        B
+And if dreams don't come true
+          A
+I'll make sure that your nightmares
+    E       A/C#  E
+Are through
 
 [Verse 2]
-E                  A
-Lay it down hard, lay it down fast
-E                             A
-Lay it down beautiful, make it last
-C#m                B
-If you've got love, lay it down
-A                  E
-If you've got love, lay it down`
+           E                  A/C#  E
+If you got pain in your heart
+              F#m
+Why don't you share it with me?
+          B
+And we'll just wait and see
+         A                     E  A/C#  E
+If it's half what it used to be
+
+[Chorus]
+                C#m   B
+And lay it down slow
+            E     A/C#  E
+Lay it down free
+            F#m   B
+Lay it down easy
+              E   A/C#  E
+But lay it on me
+
+[Verse 3]
+              E                  A/C#  E
+If you've got love in your heart
+              F#m
+Why don't you keep it with mine?
+        B                 A
+I can't promise a miracle
+                   E      A/C#  E
+But i'll always be trying
+
+[Chorus]
+                C#m   B
+And lay it down slow
+            E     A/C#  E
+Lay it down free
+            F#m   B
+Lay it down easy
+              E   A/C#  E
+But lay it on me
+            F#m   B
+Lay it down easy
+              E   A/C#  E
+But lay it on me
+            F#m   B
+Lay it down easy
+              E   A/C#  E
+But lay it on me
+
+[Outro]
+F#m  B  E  A/C#  E  x4
+
+[Solo]
+e|-----------------------------------------------------------|
+B|-----------------------------------------------------------|
+G|------6---6---------------------6---6----------------------|
+D|--6-9---9---6\\4--4\\2---2----6-9---9---6\\4--4\\2---2------2--|
+A|---------------------4--------------------------------4----|
+E|-----------------------------------------------------------|
+
+e|-----------------------------------------------------------|
+B|-----------------------------------------------------------|
+G|------6-9--------6--4-h6-6-9------6---6------6--4-6-4-6-9--|
+D|--6-9-----6-6\\4--4--4--4-4-9--6-9---9---6\\4--4--4-4-4-6-9-|
+A|-----------------------------------------------------------|
+E|-----------------------------------------------------------|
+
+e|-----------------------------------------------------------|
+B|-----------------------------------------------------------|
+G|------6---6--------------4-4-9-------6-9-9-9-----6---6-9---|
+D|--6-9---9---6\\4--6\\4-4-4-4-4-9---6-9---------6-9---9-------|
+A|-----------------------------------------------------------|
+E|-----------------------------------------------------------|`
+            },
+            {
+                id: 69,
+                title: "Damaged",
+                artist: "Primal Scream",
+                category: "Autres",
+                content: `Written by Gillespie/Innes/Young
+
+[Verse 1]
+D
+Sweet summer days
+When I was feeling so fine
+Just you and me girl
+Was a beautiful time
+   G    Em7
+Ah yeh
+               D
+Said I felt so happy, my my my
+
+A
+I was through with doubt and pain
+        Bm                 G
+All the love I felt hadn't been in vain
+    D
+Got damaged
+      A
+I got damaged
+      G
+I got damaged
+                 D
+I lost myself in you
+
+[Verse 2]
+D
+I'd wake up beside you
+You'd hold me in your arms
+Nothing and nobody's gonna do me
+Any harm
+   G    Em7
+ah yeh
+              D
+Said I felt so happy, my my my
+
+A
+And the way I felt inside
+        Bm              G
+Made me feel so glad to be alive
+    D
+Got damaged
+      A
+I got damaged
+      G
+I got damaged
+                 D
+I lost myself in you
+      G
+Do do doo
+          D
+I'd never felt so happy
+      G
+Do do doo
+          D
+I'd never felt so happy
+      Em7
+Do do doo
+          Bm      F#m
+I'd never felt so happy
+     G               A
+I'll never feel that way again, no, no, no
+
+[Solo]
+
+G
+People can be precious
+           D
+But they ain't for keeping
+G
+I got too possessive
+          D
+But souls ain't for stealing
+G
+You were my addiction
+      D
+I got strung out and crazy
+G
+Hit me like a fever
+         D
+When you left me baby
+G             D
+Stone, stone, stone in love with you, I was
+G             D
+Stone, stone, stone in love with you, I was
+G             D
+Stone, stone, stone in love with you, I was
+G             D
+Stone, stone, stone in love with you, stone`
+            },
+            {
+                id: 70,
+                title: "Surrender",
+                artist: "Suicide",
+                category: "Autres",
+                content: `No capo. Key: A
+
+[Intro]
+A  F#m  D  E
+A  F#m  D  E
+
+
+[Verse 1]
+A                  F#m
+  When you take me,    or when you may...
+D                E
+   I'll fall for you
+
+A                     F#m
+  Time is a good muse     of never knowing
+D       E
+  About you
+
+
+[Chorus]
+      A            F#m
+I surrender, I surrender
+     D  E
+To you
+
+      A            F#m
+I surrender, I surrender
+     D  E
+To you
+
+
+[Verse 2]
+A                 F#m
+  Love isn't easy,   easy to find
+D               E
+  I'll say it for you
+
+A                       F#m
+  I'm trying hard, baby,    too tired to fight
+D     E
+  For you
+
+
+[Chorus]
+      A            F#m
+I surrender, I surrender
+     D  E
+To you
+
+      A            F#m
+I surrender, I surrender
+     D  E
+To you
+
+
+[Interlude]
+A  F#m  D  E
+A  F#m  D  E
+
+
+[Verse 3]
+A                       F#m
+  My heart is in prison,    a home to you
+D               E
+  Come close to me
+
+
+[Chorus]
+      A            F#m
+I surrender, I surrender
+     D  E
+To you
+
+      A            F#m
+I surrender, I surrender
+     D  E
+To you
+
+      A            F#m
+I surrender, I surrender
+     D  E
+To you
+
+      A            F#m
+I surrender, I surrender
+     D  E
+To you`
             }
         ];
 
@@ -8010,6 +8348,7 @@ If you've got love, lay it down`
             });
             artistView.classList.add('open');
             document.body.style.overflow = 'hidden';
+            history.pushState({ modal: 'artist' }, '');
         }
 
         function closeArtistView() {
@@ -8021,19 +8360,21 @@ If you've got love, lay it down`
             stopAutoscroll();
             document.getElementById('songViewTitle').textContent = song.title;
             document.getElementById('songViewArtist').textContent = song.artist;
-            document.getElementById('songViewContent').textContent = song.content;
-            // Reset scroll position
+            document.getElementById('songViewContent').innerHTML = processContentForChords(song.content);
             document.querySelector('#songView .modal-content').scrollTop = 0;
             songView.classList.add('open');
             document.body.style.overflow = 'hidden';
+            history.pushState({ modal: 'song' }, '');
+            requestWakeLock();
         }
 
         function closeSongView() {
             stopAutoscroll();
             songView.classList.remove('open');
             if (!artistView.classList.contains('open')) {
-                document.body.style.overflow = ''; 
+                document.body.style.overflow = '';
             }
+            releaseWakeLock();
         }
 
         // =========================================================================
@@ -8077,6 +8418,211 @@ If you've got love, lay it down`
                 btn.textContent = '▶';
                 btn.style.background = 'var(--accent-color)';
             }
+        }
+
+        // =========================================================================
+        // WAKE LOCK — écran toujours allumé
+        // =========================================================================
+        let wakeLock = null;
+        async function requestWakeLock() {
+            if (!('wakeLock' in navigator)) return;
+            try { wakeLock = await navigator.wakeLock.request('screen'); } catch (e) {}
+        }
+        function releaseWakeLock() {
+            if (wakeLock) { wakeLock.release(); wakeLock = null; }
+        }
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'visible' && songView.classList.contains('open')) {
+                requestWakeLock();
+            }
+        });
+
+        // =========================================================================
+        // NAVIGATION — swipe-back iOS & bouton retour Android
+        // =========================================================================
+        window.addEventListener('popstate', () => {
+            if (songView.classList.contains('open')) {
+                closeSongView();
+            } else if (artistView.classList.contains('open')) {
+                closeArtistView();
+            }
+        });
+
+        // =========================================================================
+        // SEARCH CLEAR BUTTON
+        // =========================================================================
+        const searchClearBtn = document.getElementById('searchClear');
+        searchInput.addEventListener('input', () => {
+            searchClearBtn.style.display = searchInput.value ? 'block' : 'none';
+        });
+        searchClearBtn.addEventListener('click', () => {
+            searchInput.value = '';
+            currentSearch = '';
+            searchClearBtn.style.display = 'none';
+            renderMainView();
+            searchInput.focus();
+        });
+
+        // =========================================================================
+        // CHORD DIAGRAMS
+        // =========================================================================
+        const CHORD_DB = {
+            'A':     { strings: [-1,0,2,2,2,0],  fingers: [0,0,1,2,3,0] },
+            'B':     { strings: [-1,2,4,4,4,2],  fingers: [0,1,3,4,4,1], barre:{fret:2,from:1,to:5}, baseFret:2 },
+            'C':     { strings: [-1,3,2,0,1,0],  fingers: [0,3,2,0,1,0] },
+            'D':     { strings: [-1,-1,0,2,3,2], fingers: [0,0,0,1,3,2] },
+            'E':     { strings: [0,2,2,1,0,0],   fingers: [0,2,3,1,0,0] },
+            'F':     { strings: [1,1,2,3,3,1],   fingers: [1,1,2,3,4,1], barre:{fret:1,from:0,to:5} },
+            'G':     { strings: [3,2,0,0,0,3],   fingers: [2,1,0,0,0,4] },
+            'Am':    { strings: [-1,0,2,2,1,0],  fingers: [0,0,2,3,1,0] },
+            'Bm':    { strings: [-1,2,4,4,3,2],  fingers: [0,1,3,4,2,1], barre:{fret:2,from:1,to:5}, baseFret:2 },
+            'Cm':    { strings: [-1,3,5,5,4,3],  fingers: [0,1,3,4,2,1], barre:{fret:3,from:1,to:5}, baseFret:3 },
+            'Dm':    { strings: [-1,-1,0,2,3,1], fingers: [0,0,0,2,3,1] },
+            'Em':    { strings: [0,2,2,0,0,0],   fingers: [0,2,3,0,0,0] },
+            'Fm':    { strings: [1,3,3,1,1,1],   fingers: [1,3,4,1,1,1], barre:{fret:1,from:0,to:5} },
+            'Gm':    { strings: [3,5,5,3,3,3],   fingers: [1,3,4,1,1,1], barre:{fret:3,from:0,to:5}, baseFret:3 },
+            'F#m':   { strings: [2,4,4,2,2,2],   fingers: [1,3,4,1,1,1], barre:{fret:2,from:0,to:5}, baseFret:2 },
+            'G#m':   { strings: [4,6,6,4,4,4],   fingers: [1,3,4,1,1,1], barre:{fret:4,from:0,to:5}, baseFret:4 },
+            'C#m':   { strings: [-1,4,6,6,5,4],  fingers: [0,1,3,4,2,1], barre:{fret:4,from:1,to:5}, baseFret:4 },
+            'A7':    { strings: [-1,0,2,0,2,0],  fingers: [0,0,2,0,3,0] },
+            'B7':    { strings: [-1,2,1,2,0,2],  fingers: [0,2,1,3,0,4] },
+            'C7':    { strings: [-1,3,2,3,1,0],  fingers: [0,3,2,4,1,0] },
+            'D7':    { strings: [-1,-1,0,2,1,2], fingers: [0,0,0,2,1,3] },
+            'E7':    { strings: [0,2,0,1,0,0],   fingers: [0,2,0,1,0,0] },
+            'F#7':   { strings: [2,4,2,3,2,2],   fingers: [1,3,1,2,1,1], barre:{fret:2,from:0,to:5}, baseFret:2 },
+            'G7':    { strings: [3,2,0,0,0,1],   fingers: [3,2,0,0,0,1] },
+            'C#7':   { strings: [-1,4,3,4,2,4],  fingers: [0,3,2,4,1,4], baseFret:2 },
+            'Amaj7': { strings: [-1,0,2,1,2,0],  fingers: [0,0,2,1,3,0] },
+            'Cmaj7': { strings: [-1,3,2,0,0,0],  fingers: [0,3,2,0,0,0] },
+            'Dmaj7': { strings: [-1,-1,0,2,2,2], fingers: [0,0,0,1,2,3] },
+            'Emaj7': { strings: [0,2,1,1,0,0],   fingers: [0,3,1,2,0,0] },
+            'Fmaj7': { strings: [1,3,3,2,1,1],   fingers: [1,3,4,2,1,1], barre:{fret:1,from:0,to:5} },
+            'Am7':   { strings: [-1,0,2,0,1,0],  fingers: [0,0,2,0,1,0] },
+            'Bm7':   { strings: [-1,2,4,2,3,2],  fingers: [0,1,3,1,2,1], barre:{fret:2,from:1,to:5}, baseFret:2 },
+            'Dm7':   { strings: [-1,-1,0,2,1,1], fingers: [0,0,0,2,1,1] },
+            'Em7':   { strings: [0,2,2,0,3,0],   fingers: [0,1,2,0,3,0] },
+            'F#m7':  { strings: [2,4,2,2,2,2],   fingers: [1,3,1,1,1,1], barre:{fret:2,from:0,to:5}, baseFret:2 },
+            'Asus2': { strings: [-1,0,2,2,0,0],  fingers: [0,0,1,2,0,0] },
+            'Asus4': { strings: [-1,0,2,2,3,0],  fingers: [0,0,1,2,3,0] },
+            'Dsus2': { strings: [-1,-1,0,2,3,0], fingers: [0,0,0,1,3,0] },
+            'Dsus4': { strings: [-1,-1,0,2,3,3], fingers: [0,0,0,1,2,3] },
+            'Esus4': { strings: [0,2,2,2,0,0],   fingers: [0,1,2,3,0,0] },
+            'Cadd9': { strings: [-1,3,2,0,3,0],  fingers: [0,3,2,0,4,0] },
+            'Fadd9': { strings: [-1,-1,3,2,1,1], fingers: [0,0,3,2,1,1] },
+            'Gadd9': { strings: [3,2,0,2,0,3],   fingers: [3,2,0,1,0,4] },
+            'Eadd9': { strings: [0,2,2,1,0,2],   fingers: [0,2,3,1,0,4] },
+            'A/C#':  { strings: [-1,4,2,2,2,0],  fingers: [0,4,1,2,3,0] },
+            'D/F#':  { strings: [2,-1,0,2,3,2],  fingers: [1,0,0,2,3,4] },
+            'G/F#':  { strings: [2,2,0,0,0,3],   fingers: [2,1,0,0,0,4] },
+            'C/B':   { strings: [-1,2,2,0,1,0],  fingers: [0,2,3,0,1,0] },
+        };
+
+        function generateChordSVG(chord) {
+            const { strings, fingers, baseFret = 1, barre } = chord;
+            const W = 180, H = 200;
+            const padL = 28, padR = 24, padTop = 44, padBot = 16;
+            const numFrets = 4, numStrings = 6;
+            const strW = (W - padL - padR) / (numStrings - 1);
+            const fretH = (H - padTop - padBot) / numFrets;
+
+            let s = `<svg width="${W}" height="${H}" xmlns="http://www.w3.org/2000/svg">`;
+
+            // Nut
+            if (baseFret === 1) {
+                s += `<rect x="${padL}" y="${padTop - 5}" width="${(numStrings-1)*strW}" height="6" rx="2" fill="#333"/>`;
+            } else {
+                s += `<text x="${padL + (numStrings-1)*strW + 6}" y="${padTop + fretH*0.65}" font-size="13" fill="#666" font-family="sans-serif">${baseFret}</text>`;
+            }
+
+            // Fret lines
+            for (let f = 0; f <= numFrets; f++) {
+                const y = padTop + f * fretH;
+                s += `<line x1="${padL}" y1="${y}" x2="${padL+(numStrings-1)*strW}" y2="${y}" stroke="#ccc" stroke-width="1"/>`;
+            }
+            // String lines
+            for (let i = 0; i < numStrings; i++) {
+                const x = padL + i * strW;
+                s += `<line x1="${x}" y1="${padTop}" x2="${x}" y2="${padTop+numFrets*fretH}" stroke="#aaa" stroke-width="1.5"/>`;
+            }
+
+            // Barre
+            if (barre) {
+                const by = padTop + (barre.fret - baseFret + 0.5) * fretH;
+                const bx1 = padL + barre.from * strW;
+                const bx2 = padL + barre.to * strW;
+                s += `<rect x="${bx1}" y="${by-10}" width="${bx2-bx1}" height="20" rx="10" fill="#333"/>`;
+            }
+
+            // Notes
+            strings.forEach((fret, i) => {
+                const x = padL + i * strW;
+                if (fret === -1) {
+                    s += `<text x="${x}" y="${padTop-12}" text-anchor="middle" font-size="15" fill="#888" font-family="sans-serif">✕</text>`;
+                } else if (fret === 0) {
+                    s += `<circle cx="${x}" cy="${padTop-13}" r="6" fill="none" stroke="#888" stroke-width="1.5"/>`;
+                } else {
+                    const y = padTop + (fret - baseFret + 0.5) * fretH;
+                    const isBarred = barre && fret === barre.fret && i >= barre.from && i <= barre.to;
+                    if (!isBarred) {
+                        s += `<circle cx="${x}" cy="${y}" r="10" fill="#333"/>`;
+                        if (fingers && fingers[i]) {
+                            s += `<text x="${x}" y="${y+4}" text-anchor="middle" font-size="10" fill="white" font-family="sans-serif">${fingers[i]}</text>`;
+                        }
+                    }
+                }
+            });
+
+            s += '</svg>';
+            return s;
+        }
+
+        const CHORD_LINE_RE = /^[A-G][#b]?(?:m(?:aj)?(?:\d+)?|maj\d*|dim|aug|sus\d*|add\d+|\d+)?(?:\/[A-G][#b]?)?$/;
+        const CHORD_TOKEN_RE = /([A-G][#b]?(?:m(?:aj)?(?:\d+)?|maj\d*|dim|aug|sus\d*|add\d+|\d+)?(?:\/[A-G][#b]?)?)/g;
+
+        function isChordLine(line) {
+            const trimmed = line.trim();
+            if (!trimmed || trimmed.startsWith('[') || /^[eEBGDAd]\|/.test(trimmed)) return false;
+            const tokens = trimmed.split(/\s+/).filter(t => t.length > 0);
+            if (!tokens.length) return false;
+            const ok = tokens.every(t => CHORD_LINE_RE.test(t) || /^x\d+$/.test(t) || /^[-|x]+$/.test(t));
+            const hasChord = tokens.some(t => CHORD_LINE_RE.test(t));
+            return ok && hasChord;
+        }
+
+        function escHtml(t) {
+            return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+        }
+
+        function processContentForChords(content) {
+            return content.split('\n').map(line => {
+                if (isChordLine(line)) {
+                    return escHtml(line).replace(CHORD_TOKEN_RE, match => {
+                        if (CHORD_DB[match]) {
+                            return `<span class="chord-clickable" data-chord="${match}">${match}</span>`;
+                        }
+                        return match;
+                    });
+                }
+                return escHtml(line);
+            }).join('\n');
+        }
+
+        document.getElementById('songViewContent').addEventListener('click', e => {
+            if (e.target.classList.contains('chord-clickable')) {
+                showChordPopup(e.target.dataset.chord);
+            }
+        });
+
+        function showChordPopup(chordName) {
+            const chord = CHORD_DB[chordName];
+            if (!chord) return;
+            document.getElementById('chordPopupName').textContent = chordName;
+            document.getElementById('chordPopupSvg').innerHTML = generateChordSVG(chord);
+            document.getElementById('chordPopup').style.display = 'flex';
+        }
+
+        function closeChordPopup() {
+            document.getElementById('chordPopup').style.display = 'none';
         }
 
         renderMainView();
