@@ -975,7 +975,7 @@ body[unresolved] {opacity: 0; display: block; overflow: hidden; position: relati
                 <div class="modal-subtitle" id="songViewArtist">Mazzy Star</div>
             </div>
             <div class="autoscroll-controls">
-                <input type="range" class="speed-slider" id="scrollSpeed" min="1" max="10" value="3" title="Vitesse">
+                <input type="range" class="speed-slider" id="scrollSpeed" min="1" max="5" value="2" title="Vitesse">
                 <button class="autoscroll-btn" id="autoscrollBtn" onclick="toggleAutoscroll()" title="Autoscroll" style="background: var(--accent-color);" data-dashlane-label="true" data-dashlane-rid="932fd57e20e58318">▶</button>
             </div>
         </div>
@@ -8213,6 +8213,119 @@ To you
 I surrender, I surrender
      D  E
 To you`
+            },
+            {
+                id: 99,
+                title: "We Never Had A Chance",
+                artist: "The Brian Jonestown Massacre",
+                category: "Autres",
+                content: `[Intro]
+
+C   C   Bb   Bb   F   F   C   C   x2
+
+
+[Verse 1]
+
+C
+  You feel love
+Bb
+  Well you better love yourself
+F
+  Be careful now
+                  C
+  Because love is against the law
+C                                              Bb
+  But you're so high, you could give a fucking shit about the law
+F                                                        C
+  It's worth your blood, sweat and tears to be living at all
+
+
+[Refrain 1]
+
+Bb
+  You bought the lies
+F                                    C
+  Everybody tries to tell you you're dead
+
+Bb                            F                  C
+  It flashed before your eyes before anybody had said
+Bb                        F                              C
+  The motherfuckers never stopped drilling holes in your head
+
+
+[Interlude]
+
+Bb   Bb   F   F   C   C   C   C
+
+
+[Verse 2]
+
+C
+  You want life
+                  Bb
+  Oh but then you die so slow
+F
+  Hands up drop your gun
+                               C
+  Shot you dead and that's the whole of the law
+C
+  You close your eyes to look at the lies
+                  Bb
+  But then you've seen it all
+F                                                 C
+  A freeze frame lasts forever but the picture is small
+
+
+[Interlude/Solo]
+
+Bb   F   C   C   x3
+Bb   Bb   F   F   C   C   C   C
+
+C   C   Bb   Bb   F   F   C   C   x2
+
+Bb   F   C   C   x3
+Bb   Bb   F   F   C   C   C   C
+
+
+[Verse 3]
+
+C                                               Bb
+  This is love, it's everywhere, and that's the damndest thing
+F
+  It's in your eyes
+                              C
+  And butterflies and part of everything
+C
+  The cloudy skies
+
+  The fog in your eyes
+                Bb
+  That will not let you sing
+F
+  A chance to fall
+
+  And give a call
+               C
+  And grab the magic ring
+
+
+[Refrain 2]
+
+Bb                            F                         C
+  Don't be surprised when you wake up and they tell you you're dead
+Bb                             F                  C
+  You'll find that hope is the same as nothing at all
+Bb                        F                              C
+  The motherfuckers never stopped drilling holes in your head
+Bb
+  And maybe now as you're starting to sing
+F                                              C
+  You'll wake up and remember the words to the song
+
+Bb
+  Maybe now as you're starting to sing
+F                                           C     C
+  you'll wake up to discover you're singing along`
             }
         ];
 
@@ -8412,39 +8525,58 @@ To you`
         // =========================================================================
         // AUTOSCROLL
         // =========================================================================
-        let scrollInterval = null;
+        let scrollRafId = null;
         let isScrolling = false;
+        let scrollAccumulator = 0;
+        let lastScrollTime = null;
 
-        function getScrollStep() {
+        function getScrollPxPerSecond() {
             const speed = parseInt(document.getElementById('scrollSpeed').value);
-            // speed 1-10 -> px per tick (tick = 50ms)
-            return speed * 0.4;
+            // 5 crans : 1→2, 2→5, 3→10, 4→18, 5→30 px/s
+            const curve = [0, 2, 5, 10, 18, 30];
+            return curve[speed];
+        }
+
+        function autoscrollTick(timestamp) {
+            if (!isScrolling) return;
+            if (lastScrollTime === null) lastScrollTime = timestamp;
+            const elapsed = (timestamp - lastScrollTime) / 1000; // secondes
+            lastScrollTime = timestamp;
+
+            const content = document.querySelector('#songView .modal-content');
+            scrollAccumulator += getScrollPxPerSecond() * elapsed;
+
+            if (scrollAccumulator >= 1) {
+                const px = Math.floor(scrollAccumulator);
+                scrollAccumulator -= px;
+                content.scrollTop += px;
+                if (content.scrollTop + content.clientHeight >= content.scrollHeight - 2) {
+                    stopAutoscroll();
+                    return;
+                }
+            }
+
+            scrollRafId = requestAnimationFrame(autoscrollTick);
         }
 
         function toggleAutoscroll() {
             const btn = document.getElementById('autoscrollBtn');
-            const content = document.querySelector('#songView .modal-content');
             if (isScrolling) {
                 stopAutoscroll();
             } else {
                 isScrolling = true;
+                lastScrollTime = null;
+                scrollAccumulator = 0;
                 btn.textContent = '⏸';
                 btn.style.background = 'var(--text-secondary)';
-                scrollInterval = setInterval(() => {
-                    const step = getScrollStep();
-                    content.scrollTop += step;
-                    // Stop at bottom
-                    if (content.scrollTop + content.clientHeight >= content.scrollHeight - 2) {
-                        stopAutoscroll();
-                    }
-                }, 50);
+                scrollRafId = requestAnimationFrame(autoscrollTick);
             }
         }
 
         function stopAutoscroll() {
-            clearInterval(scrollInterval);
-            scrollInterval = null;
+            if (scrollRafId) { cancelAnimationFrame(scrollRafId); scrollRafId = null; }
             isScrolling = false;
+            lastScrollTime = null;
             const btn = document.getElementById('autoscrollBtn');
             if (btn) {
                 btn.textContent = '▶';
